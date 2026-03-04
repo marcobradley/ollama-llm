@@ -1,0 +1,13 @@
+services:
+  ollama-llm:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_HOST=${OLLAMA_HOST:-http://host.docker.internal:11434}
+      - MODEL=${MODEL:-llama3.2}
+    # On Windows/macOS with Docker Desktop, host.docker.internal resolves automatically.
+    # On Linux, add the extra_hosts entry below to enable the same behaviour.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
