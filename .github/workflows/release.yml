@@ -1,0 +1,29 @@
+name: Release
+on:
+  push:
+    branches:
+      - main # Change this to your main release branch (e.g., master, release)
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # This is important for fetching the full commit history and tags
+          # which is required by semantic-release to determine the correct version.
+          fetch-depth: 0 
+          persist-credentials: false # Recommended for protected branches
+
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v4 # Use the specific action
+        with:
+          extra_plugins: |
+            conventional-changelog-conventionalcommits
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
